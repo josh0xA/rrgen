@@ -13,5 +13,4 @@ setup(
 
     install_requires = ['termcolor','requests','urllib3', 'urllib', 'pythonwhois', 
     'BeautifulSoup4', 'google', 're', 'json', 'contextlib']
-    console =['scylla.py'],
 )
