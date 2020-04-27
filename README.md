@@ -53,6 +53,9 @@ optional arguments:
 ## API NOTICE
 The API used for the reverse phone number lookup (free package) has maximum 250 requests. The one used in the program right now will most definetely run out of uses in the near future. If you want to keep generating API keys, go to https://www.numverify.com, and select the free plan after creating an account. Then simply go scylla.py and replace the original API key with your new API key found in your account dashboard. Insert your new key into the keys[] array (at the top of the source). 
 
-### Liscense
-MIT License
+## Ethical Notice
+The developer of this program, Josh Schiavone, written the following code for educational and OSINT purposes only. The information generated is not to be used in a way to harm, stalk or threaten others. Josh Schiavone is not responsible for misuse of this program. May God bless you all.
+
+### License
+MIT License<br/>
 Copyright (c) 2020 Josh Schiavone
