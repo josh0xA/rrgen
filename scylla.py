@@ -19,7 +19,7 @@ Scylla - The Information Gathering Engine
 
 The developer of this program, Josh Schiavone, written the following code
 for educational and OSINT purposes only. The information generated is not to
-be used in a way to harm, stalk or threat others. Josh Schiavone is not responsible
+be used in a way to harm, stalk or threaten others. Josh Schiavone is not responsible
 for misuse of this program. May God bless you all. 
 '''
 
