@@ -17,7 +17,11 @@ Scylla is an OSINT tool developed in python 3.6. Scylla lets users perform advan
 Command 1 will return account information of that specified Instagram & Twitter account.<br/>
 2. ```python3 scylla.py --username johndoe```<br/>
 Command 2 will return all the social media (main platforms) profiles associated with that username.<br/>
-3. ```python3 scylla.py --username johndoe -l="john doe"```
+3. ```python3 scylla.py --username johndoe -l="john doe"```<br/>
 Command 3 will repeat command 2 but instead it will also perform an in-depth google search for the "-l" argument. NOTE: When searching a query with spaces make sure you add the equal sign followed by the query in quotations. If your query does not have spaces, it will be as such: ```python3 scylla.py --username johndoe -l query```<br/>
+4. ```python3 scylla.py --info google.com```<br/>
+Command 4 will return crucial WHOIS information about the webserver/website.
+5. ```python3 scylla.py -r +14167777777```<br/>
+Command 5 will dump information on that phone number (Carrier, Location, etc.)<br/>
 
 
