@@ -11,7 +11,7 @@ Scylla is an OSINT tool developed in python 3.6. Scylla lets users perform advan
 2: ```cd Scylla```<br/>
 3: ```sudo python3 -m pip install -r requirments.txt```<br/>
 4: ```python3 scylla.py --help```<br/>
-
+Note: Users might experience installation issues when using later versions of Python. 
 ## Usage
 1. ```python3 scylla.py --instagram davesmith --twitter davesmith```<br/>
 Command 1 will return account information of that specified Instagram & Twitter account.<br/>
