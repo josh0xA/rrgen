@@ -126,7 +126,7 @@ class Platform(object):
             s.print_scylla_notab("OS: OSX/Darwin", color=True)
 
         if sys.platform == "linux" or sys.platform == "linux2":
-            csg.SCL_OSYSTEM_UNIX_LINUX = True
+            cfg.SCL_OSYSTEM_UNIX_LINUX = True
             s.print_scylla_notab("OS: Unix/Linux", color=True)
 
     def ScyllaClear(self):
