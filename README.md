@@ -55,5 +55,4 @@ The API used for the reverse phone number lookup (free package) has maximum 250 
 
 ### Liscense
 MIT License
-
 Copyright (c) 2020 Josh Schiavone
