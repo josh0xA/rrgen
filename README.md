@@ -24,6 +24,33 @@ Command 4 will return crucial WHOIS information about the webserver/website.
 5. ```python3 scylla.py -r +14167777777```<br/>
 Command 5 will dump information on that phone number (Carrier, Location, etc.)<br/>
 
+## Menu
+```
+usage: scylla.py [-h] [-v] [-ig INSTAGRAM] [-tw TWITTER] [-u USERNAME]
+                 [--info INFO] [-r REVERSE_PHONE_LOOKUP] [-l LOOKUP]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         returns skyla's version
+  -ig INSTAGRAM, --instagram INSTAGRAM
+                        return the information associated with specified
+                        instagram account
+  -tw TWITTER, --twitter TWITTER
+                        return the information associated with specified
+                        twitter account
+  -u USERNAME, --username USERNAME
+                        find social media profiles (main platforms) associated
+                        with given username
+  --info INFO           return information about the specified website(WHOIS)
+                        w/ geolocation
+  -r REVERSE_PHONE_LOOKUP, --reverse_phone_lookup REVERSE_PHONE_LOOKUP
+                        return information about the specified phone number
+                        (reverse lookup)
+  -l LOOKUP, --lookup LOOKUP
+                        performs a google search of the 35 top items for the
+                        argument given
+```
+
 ## API NOTICE
 The API used for the reverse phone number lookup (free package) has maximum 250 requests. The one used in the program right now will most definetely run out of uses in the near future. If you want to keep generating API keys, go to https://www.numverify.com, and select the free plan after creating an account. Then simply go scylla.py and replace the original API key with your new API key found in your account dashboard. Insert your new key into the keys[] array (at the top of the source). 
 
