@@ -1,2 +1,1 @@
-# Scylla
-The Simplistic Information Gathering Engine
+# Scylla - The Simplistic Information Gathering Engine
