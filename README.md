@@ -4,7 +4,7 @@
 </p>
 
 ## About Scylla
-Scylla is an OSINT tool developed in python 3.6. Scylla lets users perform advanced searches on Instagram & Twitter accounts, websites/webservers, phone numbers, names. Scylla also allows users to find all social media profiles (main platforms) assigned to a certain username. This is the first version of the tool and please contact the developer if you want to help contribute and add more to Scylla.
+Scylla is an OSINT tool developed in python 3.6. Scylla lets users perform advanced searches on Instagram & Twitter accounts, websites/webservers, phone numbers and names. Scylla also allows users to find all social media profiles (main platforms) assigned to a certain username. This is the first version of the tool and please contact the developer if you want to help contribute and add more to Scylla.
 
 ## Installation
 1: ```git clone https://www.github.com/josh0xA/Scylla```<br/>
