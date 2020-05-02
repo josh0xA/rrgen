@@ -283,7 +283,9 @@ class Instagram(object):
             bsoup = BeautifulSoup(scylla_profile.text, 'html.parser')
             
             scylla_scripts = bsoup.find_all('script', attrs={'type': 'text/javascript'})
-            self.t_data = json.loads(scylla_scripts[3].get_text()[21:].strip(';'))
+            tr=str(scylla_scripts[3])
+            tr=tr[51:-10]
+            self.t_data = json.loads(tr)
             self.bsoup_data = self.t_data['entry_data']['ProfilePage'][0]['graphql']['user']
             opt = '''
         > Username                :: {} 
