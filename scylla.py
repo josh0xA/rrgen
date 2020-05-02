@@ -319,34 +319,62 @@ class Twitter(object):
     def RetrieveAccountInformation(self):
         account_information = []
         dataopt = ""
-
+        url = "http://www.twitter.com/" + self.username
+        print("\n\nGathers Details of " + self.username + " from Twitter")
+        response = None
         try:
-            twitter_profile = urlopen(str(scyllaUrls[1]) + str(self.username)).read()
-            decode = twitter_profile.decode('UTF-8')
+            response = requests.get(url)
+        except Exception as e:
+            print(repr(e))
+            sys.exit(1)
+    
+        if response.status_code != 200:
+            print("Non success status code returned "+str(response.status_code))
+            sys.exit(1)
 
-            [account_information.append(value) for value in findall('data-is-compact="false">(.*?)<', decode)]
+        soup = BeautifulSoup(response.text, 'lxml')
 
-            picture_url = findall(b'href="https://pbs.twimg.com/profile_images(.*?)"', twitter_profile)[0].decode('utf-8')
-            account_date = findall(b'<span class="ProfileHeaderCard-joinDateText js-tooltip u-dir" dir="ltr" title="(.*?)"', twitter_profile)[0].decode('utf-8')
+        if soup.find("div", {"class": "errorpage-topbar"}):
+            print("\n\n Error: Invalid username.")
+            sys.exit(1)
 
-            dataopt = '''
-        > Name      :: {}
-        > Tweets    :: {}
-        > Likes     :: {}
-        > Following :: {}
-        > Followers :: {}
-        > Account Created :: {}
-        > Link To Profile Picture :: {}
+        twname = soup.title.text.split("|")[0]
+        twbio = soup.find("p", {"class": "ProfileHeaderCard-bio u-dir"}).text
+        join_date = soup.find("span", {"class": "ProfileHeaderCard-joinDateText js-tooltip u-dir"})
+        twjoin = join_date['title']
+        followers = soup.find("li", {"class": "ProfileNav-item ProfileNav-item--followers"}).find('a')
+        twfollowers = followers['title']
+        followers = soup.find("li", {"class": "ProfileNav-item ProfileNav-item--following"}).find('a')
+        twfollowing = followers['title']
+        pictureURL = soup.find("a",{"class": "ProfileAvatar-container u-block js-tooltip profile-picture"})
+        twdp = pictureURL['data-url']
 
-            '''.format(str(findall(b'<title>(.*?) \(', twitter_profile)[0].decode('utf-8')), 
-            account_information[0], account_information[3], account_information[1], account_information[2],
-            account_date, picture_url)
+        filename = self.username+"_twitter.json"
+        print("Dumping data in file " + filename)
+        data = dict()
+        data["Bio: "] = twbio
+        data["Join date: "] = twjoin
+        data["Followers: "] = twfollowers
+        data["Following: "] = twfollowing
+        data["Profile URL: "] = twdp
 
-        except Exception as ex:
-            cprint("\tCannot Scrape Twitter Profile at This Time.", 'red', attrs=['bold'])
-            pass
+        dataopt = '''
+        > Name          :: {}
+        > Bio           :: {}
+        > Join date     :: {}
+        > Followers     :: {}
+        > Following     :: {}
+        > Profile URL   :: {}
+
+            '''.format(str(twname), str(data['Bio: ']),
+            str(data['Join date: ']), str(data['Followers: ']),
+            str(data['Following: ']), str(data['Profile URL: ']))
+
+        with open(filename, 'w') as fh:
+            fh.write(json.dumps(data))
+
         return dataopt
-        
+           
 
 def main():
     p = Platform()
