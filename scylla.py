@@ -371,7 +371,7 @@ class Twitter(object):
             str(data['Join date: ']), str(data['Followers: ']),
             str(data['Following: ']), str(data['Profile URL: ']))
 
-        with open('/data_dump_json,filename', 'w') as fh:
+        with open(filename, 'w') as fh:
             fh.write(json.dumps(data))
 
         return dataopt
