@@ -317,9 +317,10 @@ class Twitter(object):
         self.username = username
 
     def RetrieveAccountInformation(self):
+        web = Web()
         account_information = []
         dataopt = ""
-        url = "http://www.twitter.com/" + self.username
+        url = str(scyllaUrls[1]) + self.username
         print("\n\nGathers Details of " + self.username + " from Twitter")
         response = None
         try:
@@ -356,7 +357,7 @@ class Twitter(object):
         data["Join date: "] = twjoin
         data["Followers: "] = twfollowers
         data["Following: "] = twfollowing
-        data["Profile URL: "] = twdp
+        data["Profile URL: "] = web.shorten_url(twdp)
 
         dataopt = '''
         > Name          :: {}
@@ -370,7 +371,7 @@ class Twitter(object):
             str(data['Join date: ']), str(data['Followers: ']),
             str(data['Following: ']), str(data['Profile URL: ']))
 
-        with open(filename, 'w') as fh:
+        with open('/data_dump_json,filename', 'w') as fh:
             fh.write(json.dumps(data))
 
         return dataopt
