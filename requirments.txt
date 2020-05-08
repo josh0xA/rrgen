@@ -1,0 +1,7 @@
+beautifulsoup4>=4.8.0
+bs4>=0.0.1
+requests>=2.1.0
+pythonwhois>=2.4.0
+termcolor>=1.1.0
+google>=2.0.0
+lxml>=4.5.0
