@@ -23,11 +23,15 @@ Command 3 will repeat command 2 but instead it will also perform an in-depth goo
 Command 4 will return crucial WHOIS information about the webserver/website.
 5. ```python3 scylla.py -r +14167777777```<br/>
 Command 5 will dump information on that phone number (Carrier, Location, etc.)<br/>
+6. ```python3 scylla.py -s apache```<br/>
+Command 6 will dump all the IP address of apache servers that shodan can grab based on your API key. The query can be anything that shodan can validate.<br/>
+A Sample API key is given. I will recommend reading API NOTICE below for more information.<br/>
 
 ## Menu
 ```
 usage: scylla.py [-h] [-v] [-ig INSTAGRAM] [-tw TWITTER] [-u USERNAME]
                  [--info INFO] [-r REVERSE_PHONE_LOOKUP] [-l LOOKUP]
+                 [-s SHODAN_QUERY]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -49,6 +53,9 @@ optional arguments:
   -l LOOKUP, --lookup LOOKUP
                         performs a google search of the 35 top items for the
                         argument given
+  -s SHODAN_QUERY, --shodan_query SHODAN_QUERY
+                        performs a an in-depth shodan search on any simple
+                        query (i.e, 'webcamxp', 'voip', 'printer', 'apache')
 ```
 ## API NOTICE
 The API used for the reverse phone number lookup (free package) has maximum 250 requests. The one used in the program right now will most definetely run out of uses in the near future. If you want to keep generating API keys, go to https://www.numverify.com, and select the free plan after creating an account. Then simply go scylla.py and replace the original API key with your new API key found in your account dashboard. Insert your new key into the keys[] array (at the top of the source). 
