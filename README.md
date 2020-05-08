@@ -25,7 +25,7 @@ Command 4 will return crucial WHOIS information about the webserver/website.
 Command 5 will dump information on that phone number (Carrier, Location, etc.)<br/>
 6. ```python3 scylla.py -s apache```<br/>
 Command 6 will dump all the IP address of apache servers that shodan can grab based on your API key. The query can be anything that shodan can validate.<br/>
-A Sample API key is given. I will recommend reading API NOTICE below for more information.<br/>
+A Sample API key is given. I will recommend reading API NOTICE below, for more information.<br/>
 
 ## Menu
 ```
