@@ -9,7 +9,7 @@ Scylla is an OSINT tool developed in python 3.6. Scylla lets users perform advan
 ## Installation
 1: ```git clone https://www.github.com/josh0xA/Scylla```<br/>
 2: ```cd Scylla```<br/>
-3: ```sudo python3 setup.py install```<br/>
+3: ```sudo python3 -m pip install -r requirments.txt```<br/>
 4: ```python3 scylla.py --help```<br/>
 
 ## Usage
@@ -55,6 +55,9 @@ The API used for the reverse phone number lookup (free package) has maximum 250 
 
 ## Ethical Notice
 The developer of this program, Josh Schiavone, written the following code for educational and OSINT purposes only. The information generated is not to be used in a way to harm, stalk or threaten others. Josh Schiavone is not responsible for misuse of this program. May God bless you all.
+
+## Discord Server
+https://discord.gg/jtZeWek
 
 ### License
 MIT License<br/>
