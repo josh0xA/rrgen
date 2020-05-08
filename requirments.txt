@@ -5,4 +5,4 @@ pythonwhois>=2.4.0
 termcolor>=1.1.0
 google>=2.0.0
 lxml>=4.5.0
-shodan>1.23.0
+shodan>1.22.0
