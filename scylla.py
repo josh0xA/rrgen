@@ -472,7 +472,7 @@ class Shodan(object):
             
             for result in results['matches']:
                 s.print_scylla_valid("IP Address-> %s" % result['ip_str'], True)
-                s.print_scylla_valid("\t" + result['data'], True)
+                s.print_scylla_valid(result['data'], True)
         except shodan.APIError as se:
             s.print_scylla_error("ScyllaError", str(se), True)
 
@@ -683,9 +683,9 @@ def main():
                     help="performs a google search of the 35 top items for the argument given",
                     )
     parser.add_argument("-s",
-                    "--shodan",
+                    "--shodan_query",
                     type=str,
-                    help="performs a google search of the 35 top items for the argument given",
+                    help="performs a an in-depth shodan search on any simple query (i.e, 'webcamxp', 'voip', 'printer', 'apache')",
                     )                   
     args = parser.parse_args()
 
@@ -746,11 +746,11 @@ def main():
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
             sys.exit(1)
 
-    if args.shodan:
+    if args.shodan_query:
         ScyllaBreaker()
-        s.print_scylla_message("Searching ShodanAPI For: " + args.shodan, color=True)
+        s.print_scylla_message("Searching ShodanAPI For: " + args.shodan_query, color=True)
         try:
-            sh.shodan_lookup(args.shodan)
+            sh.shodan_lookup(args.shodan_query)
         except KeyboardInterrupt as ki:
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
             sys.exit(1)        
