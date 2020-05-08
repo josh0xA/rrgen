@@ -27,7 +27,7 @@ Command 5 will dump information on that phone number (Carrier, Location, etc.)<b
 Command 6 will dump all the IP address of apache servers that shodan can grab based on your API key. The query can be anything that shodan can validate.<br/>
 A Sample API key is given. I will recommend reading API NOTICE below, for more information.<br/>
 7. ```python3 scylla.py -s webcamxp```<br/>
-Command 7 will dump all the IP addresses and ports of open webcams on the internet that shodan can grab based on your API key. The query can be anything that shodan can validate. You can also just use the ``webcam`` query but ``webcamxp`` returns better results.<br/>
+Command 7 will dump all the IP addresses and ports of open webcams on the internet that shodan can grab based on your API key. You can also just use the ``webcam`` query but ``webcamxp`` returns better results.<br/>
 A Sample API key is given. I will recommend reading API NOTICE below, for more information.<br/>
 
 ## Menu
