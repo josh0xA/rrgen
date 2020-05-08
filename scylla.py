@@ -460,19 +460,57 @@ class Web(object):
             s.print_scylla_valid(j, color=True)
 
 class Shodan(object):
-   
-    def shodan_lookup(self, query):
+
+    def check_api(self):
+        s = Scylla()
+        if len(shodan_api) == 0:
+            s.print_scylla_error("ScyllaError", "API key not located.", True)
+            return False
+        return True
+
+    def shodan_webcam(self, query):
         s = Scylla()
         api = shodan.Shodan(str(shodan_api[0]))
         try:
             results = api.search(query)
             total_results = int(results['total'])
 
-            s.print_scylla_message("Results Found: " + str(total_results), True)
+            s.print_scylla_valid("Results Found: " + str(total_results), True)
+            s.print_scylla_message("Results Shown May Vary Based On Your API Plan...\n", True)
+            time.sleep(0.8)
+
+            for result in results['matches']:
+                ip_addr = result['ip_str']
+                port_number = result['port']
+                sh_country = result['location']['country_name']
+                # Check if port number is equal to default webcamxp port number
+                if query == "webcamxp" and port_number == 8080:
+                    s.print_scylla_valid("IP Address/Host-> %s:%s" % (ip_addr, port_number), True)
+                    s.print_scylla_valid("Webcam Located In: %s" % sh_country, True)
+                    print('')
+                else: pass
+        except shodan.APIError as se:
+            s.print_scylla_error("ScyllaError", str(se), True)
+
+    def shodan_lookup(self, query):
+        s = Scylla()
+        api = shodan.Shodan(str(shodan_api[0]))       
+        
+        try:
+            results = api.search(query)
+            total_results = int(results['total'])
+
+            s.print_scylla_valid("Results Found: " + str(total_results), True)
+            s.print_scylla_message("Results Shown May Vary Based On Your API Plan...\n", True)
+            time.sleep(0.8)
             
             for result in results['matches']:
-                s.print_scylla_valid("IP Address-> %s" % result['ip_str'], True)
-                s.print_scylla_valid(result['data'], True)
+                ip_addr = result['ip_str']
+                port_number = result['port']
+                sh_data = result['data']
+
+                s.print_scylla_valid("IP Address/Host-> %s:%s" % (ip_addr, port_number), True)
+                #s.print_scylla_valid(sh_data, True)
         except shodan.APIError as se:
             s.print_scylla_error("ScyllaError", str(se), True)
 
@@ -746,15 +784,29 @@ def main():
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
             sys.exit(1)
 
-    if args.shodan_query:
+    if args.shodan_query == "webcamxp":
         ScyllaBreaker()
         s.print_scylla_message("Searching ShodanAPI For: " + args.shodan_query, color=True)
         try:
-            sh.shodan_lookup(args.shodan_query)
+            if sh.check_api():
+                sh.shodan_webcam(args.shodan_query)
+            else:
+                sys.exit(-1)
         except KeyboardInterrupt as ki:
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
-            sys.exit(1)        
+            sys.exit(1)
 
+    elif args.shodan_query:
+        ScyllaBreaker()
+        s.print_scylla_message("Searching ShodanAPI For: " + args.shodan_query, color=True)
+        try:
+            if sh.check_api():
+                sh.shodan_lookup(args.shodan_query)
+            else:
+                sys.exit(-1)
+        except KeyboardInterrupt as ki:
+            cprint("\tExiting Scylla...", 'red', attrs=['bold'])
+            sys.exit(1)
 
 
 if __name__ == "__main__":
