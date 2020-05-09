@@ -29,16 +29,18 @@ A Sample API key is given. I will recommend reading API NOTICE below, for more i
 7. ```python3 scylla.py -s webcamxp```<br/>
 Command 7 will dump all the IP addresses and ports of open webcams on the internet that shodan can grab based on your API key. You can also just use the ``webcam`` query but ``webcamxp`` returns better results.<br/>
 A Sample API key is given. I will recommend reading API NOTICE below, for more information.<br/>
+8. ```python3 scylla.py -g 1.1.1.1```<br/>
+Command 8 will geolocate the specified IP address. It will return the longitude & latitude, city, state/province, country, zip/postal code region and the district.<br/>
 
 ## Menu
 ```
 usage: scylla.py [-h] [-v] [-ig INSTAGRAM] [-tw TWITTER] [-u USERNAME]
                  [--info INFO] [-r REVERSE_PHONE_LOOKUP] [-l LOOKUP]
-                 [-s SHODAN_QUERY]
+                 [-s SHODAN_QUERY] [-g GEO]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         returns skyla's version
+  -v, --version         returns scyla's version
   -ig INSTAGRAM, --instagram INSTAGRAM
                         return the information associated with specified
                         instagram account
@@ -59,6 +61,8 @@ optional arguments:
   -s SHODAN_QUERY, --shodan_query SHODAN_QUERY
                         performs a an in-depth shodan search on any simple
                         query (i.e, 'webcamxp', 'voip', 'printer', 'apache')
+  -g GEO, --geo GEO     geolocates a given IP address. provides: longitude,
+                        latitude, city, country, zipcode, district, etc.
 ```
 ## API NOTICE
 The API used for the reverse phone number lookup (free package) has maximum 250 requests. The one used in the program right now will most definetely run out of uses in the near future. If you want to keep generating API keys, go to https://www.numverify.com, and select the free plan after creating an account. Then simply go scylla.py and replace the original API key with your new API key found in your account dashboard. Insert your new key into the keys[] array (at the top of the source). For the Shodan API key, it is just a sample key given to the program. The developer recommends creating a shodan account and adding your own API key to the shodan_api[] array at the top of the source (scylla.py). 
