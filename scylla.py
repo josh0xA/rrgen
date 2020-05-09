@@ -55,7 +55,7 @@ except ImportError as ie:
 __version__ = "1.1"
 __author__  = "Josh Schiavone 2020"
 
-scyllaUrls = ["https://www.instagram.com/", "https://www.twitter.com/", "http://api.hackertarget.com/geoip/?q="]
+scyllaUrls = ["https://www.instagram.com/", "https://www.twitter.com/", "https://api.ipgeolocation.io/ipgeo?apiKey="]
 reqErrorCodes = [404, 400, 401, 320, 500, 501, 502, 503, 504]
 
 '''
@@ -64,6 +64,7 @@ and add their own API keys.
 '''
 sms_api = ['23f9cdfa535aa12cd21c844d552bfcb0']
 shodan_api = ['ouLQS2Obofjsb8eda7Fchq50AyNTCRPw']
+geolocation_api =['00011187b0d94706a28b0d40f9c4d679']
 
 useragent = [
     'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1464.0 Safari/537.36',
@@ -342,6 +343,12 @@ class Scylla(object):
         else:
             print(f"\t[!] {msg}")
 
+    def print_scylla_noprefix(self, msg, color=True):
+        if color:
+            cprint(msg, 'green', attrs=['bold'])
+        else: print('\t' + msg)
+
+
 class Platform(object):
     def GetOperatingSystemDescriptor(self):
         s = Scylla()
@@ -365,6 +372,126 @@ class Platform(object):
 
         if sys.platform == "darwin" or sys.platform == "linux" or sys.platform == "linux2":
             os.system("clear")
+
+class GEO(object):
+    def geo_check_api(self, apikey):
+        s = Scylla()
+        if len(geolocation_api) == 0:
+            s.print_scylla_error("ScyllaError:", "API key not found.", True)
+            return False
+        return True
+
+    def geo_return_ip_address(self, ip_addr):
+        if ip_addr is None:
+            return False
+
+        return str(ip_addr)
+
+    '''
+    Main method in contacting the API. Sometimes GET will throw unexpected exceptions. 
+    TODO: Implement and else: send_post_req() func
+    '''
+    def geo_api_get_request(self, api_key, ip_address):
+        s = Scylla()
+
+        sender = "https://api.ipgeolocation.io/ipgeo?apiKey={}&ip={}&fields=geo".format(str(api_key), ip_address)
+        
+        try:
+            req = requests.get(sender, headers={'User-Agent': random.choice(useragent)})
+            jsonRes = req.json()
+
+            if req.status_code in reqErrorCodes:
+                s.print_scylla_error("ScyllaError", str(req.status_code), True)
+                pass
+
+        except requests.RequestException as re:
+            s.print_scylla_error("ScyllaError", str(re), True)
+            pass
+        
+        except ValueError as ve:
+            s.print_scylla_error("ScyllaError", str(ve), True)
+
+        city = jsonRes['city']
+        ip = jsonRes["ip"]
+        longitude = jsonRes['longitude']
+        latitude = jsonRes['latitude']
+        state_province = jsonRes['state_prov']
+        country = jsonRes['country_name']
+        zip_postal_code = jsonRes['zipcode']
+        district = jsonRes['district']
+
+        opt = '''
+        >IP Address          ::  {}
+        >Longitude           ::  {}
+        >Latitude            ::  {}
+        >City                ::  {}
+        >State/Province      ::  {}
+        >Country             ::  {}
+        >Postal/Zip code     ::  {}
+        >District            ::  {}
+        '''.format(str(ip), str(longitude), str(latitude), str(city), str(state_province), str(country),
+        str(zip_postal_code), str(district))
+
+        return opt
+
+    '''
+    Sends the API a post request instead of a get request. Function still in progress. Might use if GET is 
+    returning unexpect exceptions.
+    '''
+    def geo_api_post_request(self, api_key, ip_address):
+        s = Scylla()
+
+        sender = "https://api.ipgeolocation.io/ipgeo?apiKey={}&ip={}&fields=geo".format(str(api_key), ip_address)
+        
+        try:
+            req = requests.post(sender, headers={'User-Agent': random.choice(useragent)})
+            jsonRes = req.json()
+
+            if req.status_code in reqErrorCodes:
+                s.print_scylla_error("ScyllaError", str(req.status_code), True)
+                pass
+
+        except requests.RequestException as re:
+            s.print_scylla_error("ScyllaError", str(re), True)
+            pass
+        
+        except ValueError as ve:
+            s.print_scylla_error("ScyllaError", str(ve), True)
+
+        city = jsonRes['city']
+        ip = jsonRes["ip"]
+        longitude = jsonRes['longitude']
+        latitude = jsonRes['latitude']
+        state_province = jsonRes['state_prov']
+        country = jsonRes['country_name']
+        zip_postal_code = jsonRes['zipcode']
+        district = jsonRes['district']
+
+        opt = '''
+        >IP Address          ::  {}
+        >Longitude           ::  {}
+        >Latitude            ::  {}
+        >City                ::  {}
+        >State/Province      ::  {}
+        >Country             ::  {}
+        >Postal/Zip code     ::  {}
+        >District            ::  {}
+        '''.format(str(ip), str(longitude), str(latitude), str(city), str(state_province), str(country),
+        str(zip_postal_code), str(district))
+
+        return opt 
+
+    def geo_retrieve_ip_information(self, ip_addr):
+        s = Scylla()
+        g = GEO()
+        try:
+            ip_info = g.geo_api_get_request(geolocation_api[0], g.geo_return_ip_address(str(ip_addr)))
+            s.print_scylla_message("Results On IP Address: " + str(ip_addr), True)
+            s.print_scylla_noprefix(ip_info, True)
+        except Exception as e:
+            s.print_scylla_error("ScyllaError", str(e), True)
+       
+
 
 class Web(object):
 
@@ -403,11 +530,11 @@ class Web(object):
 
     def scylla_geolocate_ip_address(self, ip_addr):
         s = Scylla()
+        g = GEO()
 
         reverse_socket_dns = socket.getfqdn(ip_addr)
-        geoip = requests.get(scyllaUrls[2] + str(ip_addr), headers={'User-Agent': random.choice(useragent)})
-        bsoup = BeautifulSoup(geoip.text, 'html.parser')
-        s.print_scylla_valid(str(bsoup), color=True)
+        geoip = g.geo_retrieve_ip_information(g.geo_return_ip_address(str(ip_addr)))
+        s.print_scylla_noprefix(geoip, color=True)
 
     def scylla_whois(self, domain):
         w = Web()
@@ -545,6 +672,7 @@ class SMS(object):
 
 # TODO: Add an email class
 
+
 class Instagram(object):
 
     def __init__(self, username):
@@ -680,14 +808,16 @@ def main():
     p.GetOperatingSystemDescriptor()
 
     LoadScyllaBanner()
+    time.sleep(2)
     s = Scylla()
     w = Web()
     sh = Shodan()
+    g = GEO()
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-v",
                         "--version",
-                        help="returns skyla's version",
+                        help="returns scyla's version",
                         action="store_true")
     parser.add_argument("-ig",
                         "--instagram",
@@ -724,7 +854,13 @@ def main():
                     "--shodan_query",
                     type=str,
                     help="performs a an in-depth shodan search on any simple query (i.e, 'webcamxp', 'voip', 'printer', 'apache')",
-                    )                   
+                    )    
+    parser.add_argument("-g",
+                    "--geo",
+                    type=str,
+                    help="geolocates a given IP address. provides: longitude, latitude, city, country, zipcode, district, etc.",
+                    )  
+                 
     args = parser.parse_args()
 
     if args.version:
@@ -783,6 +919,14 @@ def main():
         except KeyboardInterrupt as ki:
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
             sys.exit(1)
+
+    if args.geo:
+        ScyllaBreaker()
+        try:
+            g.geo_retrieve_ip_information(args.geo)
+        except KeyboardInterrupt as ki:
+           cprint("\tExiting Scylla...", 'red', attrs=['bold'])
+           sys.exit(1) 
 
     if args.shodan_query == "webcamxp":
         ScyllaBreaker()
