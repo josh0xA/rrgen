@@ -52,7 +52,7 @@ except ImportError as ie:
     sys.exit(1)
 
 
-__version__ = "1.1"
+__version__ = "1.2"
 __author__  = "Josh Schiavone 2020"
 
 scyllaUrls = ["https://www.instagram.com/", "https://www.twitter.com/", "https://api.ipgeolocation.io/ipgeo?apiKey="]
