@@ -23,7 +23,7 @@ def LoadScyllaBanner():
     bannerB = colored(r"""
                  ./~
         (=@@@@@@@=[}=================--
-                 `\_ ... I ❤ Scylla
+                 `\_ ... I <3 Scylla
     """, 'cyan', attrs=['bold'])
 
     subBanner = colored('''
