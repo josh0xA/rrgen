@@ -1,6 +1,6 @@
 # Scylla - The Simplistic Information Gathering Engine
 <p align="center">
-  <img src="https://github.com/josh0xA/Scylla/blob/master/imgs/scyllalogo.png?raw=true">
+  <img src="https://github.com/josh0xA/Scylla/blob/master/imgs/Screen%20Shot%202020-05-10%20at%206.43.35%20AM.png?raw=true">
 </p>
 
 ## About Scylla
