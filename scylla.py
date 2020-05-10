@@ -45,6 +45,8 @@ import socket
 
 import shodan
 
+import threading
+
 try:
     from googlesearch import search
 except ImportError as ie:
@@ -52,11 +54,12 @@ except ImportError as ie:
     sys.exit(1)
 
 
-__version__ = "1.2"
+__version__ = "1.1"
 __author__  = "Josh Schiavone 2020"
 
 scyllaUrls = ["https://www.instagram.com/", "https://www.twitter.com/", "https://api.ipgeolocation.io/ipgeo?apiKey="]
-reqErrorCodes = [404, 400, 401, 320, 500, 501, 502, 503, 504]
+reqErrorCodes = [320, 400, 401, 404, 422, 500, 501, 502, 503, 504]
+reqSuccessCodes = [200, 201, 202, 203]
 
 '''
 API Key Storage. Users can modify the these arrays in the source to fit there needs
@@ -506,14 +509,16 @@ class Web(object):
         with open('sites.txt', 'r') as istr:
             with open('sites_opt.txt', 'w') as ostr:
                 try:
+                    error_codes_set = set(reqErrorCodes)
+                    success_codes_set = set(reqSuccessCodes)
                     s.print_scylla_message("Searching Known Social Networks For: " + username, color=True)
                     for i, line in enumerate(istr):
                         # Get rid of the trailing newline (if any).
                         line = line.rstrip('\n') + str(username)
                         req = requests.get(line, headers={'User-Agent': random.choice(useragent)})
-                        if req.status_code == cfg.SCL_HTTP_GET_SUCCESS:
+                        if req.status_code in success_codes_set:
                             s.print_scylla_valid(line + " => profile FOUND!", color=True)
-                        elif req.status_code == cfg.SCL_HTTP_GET_FATAL:
+                        elif req.status_code in error_codes_set: 
                             s.print_scylla_invalid(line + " => profile doesn't exist. continuing...", color=True)
                             continue
                 except Exception as ex:
@@ -888,7 +893,10 @@ def main():
     if args.username:
         ScyllaBreaker()
         try:
-            w.dump_user_data(args.username)
+            username_thread = threading.Thread(target=w.dump_user_data, args=(args.username,))
+            username_thread.start()
+            username_thread.join()
+
         except KeyboardInterrupt as ki:
             cprint("\tExiting Scylla...", 'red', attrs=['bold'])
             sys.exit(1)
