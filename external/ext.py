@@ -12,21 +12,25 @@ import random
 from termcolor import colored, cprint
 
 def LoadScyllaBanner():
-    bannerA = colored('''
-
-███████  ██████ ██    ██ ██      ██       █████  
+  
+    bannerA = colored(r"""
+███████  ██████ ██    ██ ██      ██       █████                                     
 ██      ██       ██  ██  ██      ██      ██   ██ 
-███████ ██        ████   ██      ██      ███████ 
-     ██ ██         ██    ██      ██      ██   ██ 
-███████  ██████    ██    ███████ ███████ ██   ██ 
-   ''', 'red')
+███████ ██        ████   ██      ██      ███████        
+     ██ ██         ██    ██      ██      ██   ██ 
+███████  ██████    ██    ███████ ███████ ██   ██   
+    """, 'red')
+    bannerB = colored(r"""
+                 ./~
+        (=@@@@@@@=[}=================--
+                 `\_ ... I ❤ Scylla
+    """, 'cyan', attrs=['bold'])
+
     subBanner = colored('''
         The Information Gathering Engine
-          Developed By: Josh Schiavone
-           https://github.com/josh0xA                                                                                                                                                          
-    
+          Developed By: Josh Schiavone                                                                                                                                                           
     ''', 'green', attrs=['bold'])
-    print(bannerA + subBanner)
+    print(bannerA + bannerB + subBanner)
 
 def ScyllaBreaker():
   breaker = colored('''
