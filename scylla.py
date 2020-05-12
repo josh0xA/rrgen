@@ -734,6 +734,7 @@ class Twitter(object):
     def RetrieveAccountInformation(self):
         web = Web()
         s = Scylla()
+        cfg = Config()
         account_information = []
         dataopt = ""
 
@@ -762,44 +763,69 @@ class Twitter(object):
             twname = soup.title.text.split("|")[0]
             twbio = soup.find("p", {"class": "ProfileHeaderCard-bio u-dir"}).text
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
         try:
             join_date = soup.find("span", {"class": "ProfileHeaderCard-joinDateText js-tooltip u-dir"})
             twjoin = join_date['title']
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
         try:
             followers = soup.find("li", {"class": "ProfileNav-item ProfileNav-item--followers"}).find('a')
             twfollowers = followers['title']
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
         try:
             followers = soup.find("li", {"class": "ProfileNav-item ProfileNav-item--following"}).find('a')
             twfollowing = followers['title']
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
         try:
             pictureURL = soup.find("a",{"class": "ProfileAvatar-container u-block js-tooltip profile-picture"})
             twdp = pictureURL['data-url']
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
         try:
             filename = self.username+"_twitter.json"
             s.print_scylla_valid("Dumping data in file " + filename, True)
         except AttributeError as y: pass
+        except TypeError as te:
+            s.print_scylla_error("ScyllaError", str(te), True)
+            pass
 
-        data = dict()
-        data["Bio: "] = twbio
-        data["Join date: "] = twjoin
-        data["Followers: "] = twfollowers
-        data["Following: "] = twfollowing
-        data["Profile URL: "] = web.shorten_url(twdp)
- 
-        dataopt = '''
-       > Name          :: {}
-       > Bio           :: {}
-       > Join date     :: {}
-       > Followers     :: {}
-       > Following     :: {}
-       > Profile URL   :: {}
-           '''.format(str(twname), str(data['Bio: ']),
-            str(data['Join date: ']), str(data['Followers: ']),
-            str(data['Following: ']), str(data['Profile URL: ']))
+        try:
+            data = dict()
+            data["Bio: "] = twbio
+            data["Join date: "] = twjoin
+            data["Followers: "] = twfollowers
+            data["Following: "] = twfollowing
+            data["Profile URL: "] = web.shorten_url(twdp)
+        except UnboundLocalError:
+            pass
+
+        try:
+            dataopt = '''
+        > Name          :: {}
+        > Bio           :: {}
+        > Join date     :: {}
+        > Followers     :: {}
+        > Following     :: {}
+        > Profile URL   :: {}
+            '''.format(str(twname), str(data['Bio: ']),
+                str(data['Join date: ']), str(data['Followers: ']),
+                str(data['Following: ']), str(data['Profile URL: ']))
+        except KeyError:
+            s.print_scylla_error("ScyllaError", "@" + self.username + " - Account Cannot Be Scraped", True)
+
  
         with open(filename, 'w') as fh:
             fh.write(json.dumps(data))
