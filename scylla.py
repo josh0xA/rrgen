@@ -35,7 +35,7 @@ import string
 from external.ext import *
 
 from re import findall
-from urllib.request import urlopen
+from urllib.request import urlopen, HTTPError
 
 import json
 import pythonwhois
@@ -47,6 +47,8 @@ import shodan
 
 import threading
 
+import itertools
+
 try:
     from googlesearch import search
 except ImportError as ie:
@@ -54,7 +56,7 @@ except ImportError as ie:
     sys.exit(1)
 
 
-__version__ = "1.1"
+__version__ = "1.2"
 __author__  = "Josh Schiavone 2020"
 
 scyllaUrls = ["https://www.instagram.com/", "https://www.twitter.com/", "https://api.ipgeolocation.io/ipgeo?apiKey="]
@@ -68,6 +70,14 @@ and add their own API keys.
 sms_api = ['23f9cdfa535aa12cd21c844d552bfcb0']
 shodan_api = ['ouLQS2Obofjsb8eda7Fchq50AyNTCRPw']
 geolocation_api =['00011187b0d94706a28b0d40f9c4d679']
+
+# API URL storage (if any)
+scylla_api_urls = ['https://lookup.binlist.net/']
+
+# Finance Handler
+breach_list =  ['cl1p.net', 'dpaste', 'dumpz.org', 'hastebin', 'ideone', 'pastebin', 'pw.fabian-fingerle.de', 'https://www.heypasteit.com/',
+'ivpaste.com','mysticpaste.com','paste.org.ru','paste2.org','sebsauvage.net/paste/','slexy.org','squadedit.com',
+'wklej.se','textsnip.com']
 
 useragent = [
     'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1464.0 Safari/537.36',
@@ -165,8 +175,8 @@ useragent = [
     'Opera/9.80 (Windows NT 6.0) Presto/2.12.388 Version/12.14',
     'Opera/9.80 (X11; Linux i686; U; it) Presto/2.7.62 Version/11.00',
     'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.11 Safari/535.19',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7',
+    'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.11 Safari/535.19',
     'Opera/12.0(Windows NT 5.1;U;en)Presto/22.9.168 Version/12.00',
     'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11',
     'Opera/9.80 (X11; Linux i686; U; es-ES) Presto/2.8.131 Version/11.11',
@@ -184,7 +194,7 @@ useragent = [
     'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11',
     'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3',
     'Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02',
-    'Mozilla/4.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/5.0)',
+    'Mozilla/4.0 (compatible; MSIE 10.0; Windows NT 6.1;',
     'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; pl) Opera 11.00',
     'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24',
@@ -315,6 +325,13 @@ class Config:
     SCL_HTTP_GET_SUCCESS = 200
     SCL_HTTP_GET_FATAL = 404
 
+    # Finance Codes
+    SCL_MIN_CARD_CHAR_LENGTH = 12
+    SCL_MAX_CARD_CHAR_LENGTH = 19
+
+end_loader = False
+
+
 class Scylla(object):
     def print_scylla_message(self, msg, color=True):
         icon = '[*] '
@@ -350,6 +367,18 @@ class Scylla(object):
         if color:
             cprint(msg, 'green', attrs=['bold'])
         else: print('\t' + msg)
+
+    '''
+    For functions that provide longer wait times for an output
+    '''
+    def scylla_animate(self):
+        iter_chars = ['|', '/', '-', '\\']
+        while end_loader == False:
+            for j in itertools.cycle(iter_chars):
+                sys.stdout.write("\r\tScyllaProcess - Loading... " + j)
+                sys.stdout.flush()
+                time.sleep(0.1)
+            sys.stdout.write("\r\tFinished.")
 
 
 class Platform(object):
@@ -588,8 +617,11 @@ class Web(object):
 
     def search_google(self, query):
         s = Scylla()
-        for j in search(query, tld="co.in", num=35, stop=35, pause=2):
-            s.print_scylla_valid(j, color=True)
+        try:
+            for j in search(query, tld="co.in", num=35, stop=35, pause=2):
+                s.print_scylla_valid(j, color=True)
+        except HTTPError as hpe:
+            s.print_scylla_error("ScyllaError", str(hpe), True)
 
 class Shodan(object):
 
@@ -677,7 +709,6 @@ class SMS(object):
 
 # TODO: Add an email class
 
-
 class Instagram(object):
 
     def __init__(self, username):
@@ -722,9 +753,8 @@ class Instagram(object):
              str(self.bsoup_data['business_category_name']), web.shorten_url(str(self.bsoup_data['profile_pic_url_hd'])))
 
         elif scylla_profile.status_code in reqErrorCodes:
-            print("Instagram Username Is Invalid.")
+            cprint("\tInstagram Username Is Invalid.", 'white', attrs=['bold'])
             sys.exit(1)
-
         return opt
 
 class Twitter(object):
@@ -832,6 +862,136 @@ class Twitter(object):
  
         return dataopt
 
+class Finance(object):
+
+    def get_api(self, api_url):
+        if len(api_url) == 0:
+            return False
+        return True
+        
+    def api_get_request(self, api_url, bin_number):
+        fi = Finance()
+        s = Scylla()
+        sender = api_url + str(bin_number)
+
+        if fi.get_api(sender):
+            try:
+                req = requests.get(sender, headers={'User-Agent': random.choice(useragent)})
+                json_response = req.json()
+                if req.status_code in reqErrorCodes:
+                    s.print_scylla_error("ScyllaError", str(req.status_code), True)
+                    pass
+
+            except requests.RequestException as re:
+                s.print_scylla_error("ScyllaError", str(re), True)
+                pass
+
+            bin_opt = ""
+            with suppress(KeyError):
+                bin_length = str(json_response['number']['length'])
+                bin_scheme = str(json_response['scheme'])
+                bin_card_type = str(json_response['type'])
+                bin_card_brand = str(json_response['brand'])
+                bin_is_prepaid = str(json_response['prepaid'])
+                bin_country = str(json_response['country']['name'])
+                bin_country_currency = str(json_response['country']['currency'])
+                bin_bank = str(json_response['bank']['name'])
+                bin_bank_url = str(json_response['bank']['url'])
+
+                bin_opt = '''
+        >(BIN) Number Length          :: {}
+        >(BIN) Card Scheme            :: {}
+        >(BIN) Card Type              :: {}
+        >(BIN) Card Brand             :: {}
+        >(BIN) Prepaid Card?          :: {}
+        >(BIN) Country                :: {}
+        >(BIN) Currency               :: {}
+        >(BIN) Bank                   :: {}
+        >(BIN) Bank URL               :: {}
+                '''.format(bin_length, bin_scheme, bin_card_type, bin_card_brand, bin_is_prepaid, bin_country,
+                bin_country_currency, bin_bank, bin_bank_url)
+         
+        return bin_opt
+    
+    def retrieve_bin_number_information(self, bin_number):
+        s = Scylla()
+        fi = Finance()
+
+    
+        bin_info = fi.api_get_request(scylla_api_urls[0], bin_number)
+        s.print_scylla_message("Results on BIN Number: " + str(bin_number), True)
+        s.print_scylla_noprefix(bin_info, True)
+
+    def check_card_authenticity(self, card_number):
+        cfg = Config()
+        if len(str(card_number)) >= cfg.SCL_MIN_CARD_CHAR_LENGTH and len(str(card_number)) <= cfg.SCL_MAX_CARD_CHAR_LENGTH:
+            return True
+        return False
+
+
+    def check_breached_card(self, card_number):
+        # Referenced the CardPwn Github repository
+        s = Scylla()
+        fi = Finance()
+
+        url_dumps = []
+        url_queries = []
+        number_of_dumps = []
+
+        try:
+            if fi.check_card_authenticity(card_number):
+                time.sleep(1)
+                cprint("\n\tRetrieving Possible Breach Information...One Moment.", 'white', attrs=['bold'])
+
+                for breacher in breach_list:
+                    breach_query = "{} {}".format(breacher, card_number)
+                    url_queries.append(breach_query)
+
+                for request in url_queries:
+                    for site in search(request, pause=1.3, stop=20, user_agent=random.choice(useragent)):
+                        url_dumps.append(site)
+
+                for element in url_dumps:
+                    for breacher in breach_list:
+                        if '{}'.format(breacher) in element:
+                            s.print_scylla_valid("Card Possibly Pasted @: " + element, True)
+                            number_of_dumps.append(element)
+            else:
+                s.print_scylla_error("ScyllaError", "Invalid Card Number", True)
+                pass
+            site_list = len(number_of_dumps)
+            if site_list == 0:
+                s.print_scylla_error("ScyllaError", "No Leaks Found :)", True)
+
+            else: 
+                cprint("\tTotal Dumps-> " + str(site_list),'blue')
+                return True
+
+        except (ValueError, KeyError, IndexError):
+            s.print_scylla_error("ScyllaNotice", "Invalid Card Number", True)
+
+        except HTTPError as hpe:
+            s.print_scylla_error("ScyllaError", str(hpe), True)
+
+
+    def finalize_breach_information(self, cardnumber):
+        s = Scylla()
+        fi = Finance()
+
+        bin_number_possibility_a = cardnumber[0:6]
+        bin_number_possibility_b = cardnumber[0:7] # For debugging purposes. TODO If 6-digit bin throws exceptions. Try 7
+        bin_number_possibility_c = cardnumber[0:8] # For debugging purposes. TODO If 6-digit bin throws exceptions. Try 8
+
+        
+        bin_info = fi.retrieve_bin_number_information(str(bin_number_possibility_a))
+        if bin_info is not None:
+            s.print_scylla_message("Cannot Return BIN Number Information", True)
+        else:
+            s.print_scylla_message("BIN Information Returned(" + bin_number_possibility_a +")", True)
+
+        try:
+            fi.check_breached_card(cardnumber)              
+        except KeyboardInterrupt as ki: cprint("Exiting Scylla...", 'red')
 
 def main():
     p = Platform()
@@ -845,6 +1005,10 @@ def main():
     sh = Shodan()
     g = GEO()
 
+    
+    fi = Finance()
+    
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("-v",
                         "--version",
@@ -890,7 +1054,12 @@ def main():
                     "--geo",
                     type=str,
                     help="geolocates a given IP address. provides: longitude, latitude, city, country, zipcode, district, etc.",
-                    )  
+                    ) 
+    parser.add_argument("-c",
+                    "--card_info",
+                    type=str,
+                    help="check if the credit/debit card number has been pasted in a breach...dumps sites. Also returns bank information on the IIN",
+                    )   
                  
     args = parser.parse_args()
 
@@ -961,6 +1130,13 @@ def main():
         except KeyboardInterrupt as ki:
            cprint("\tExiting Scylla...", 'red', attrs=['bold'])
            sys.exit(1) 
+
+    if args.card_info:
+        ScyllaBreaker()
+        if " " in args.card_info:
+            new_arg = args.card_info.replace(' ', '')
+            fi.finalize_breach_information(str(new_arg))
+        else: fi.finalize_breach_information(args.card_info)
 
     if args.shodan_query == "webcamxp":
         ScyllaBreaker()
