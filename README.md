@@ -32,7 +32,7 @@ A Sample API key is given. I will recommend reading API NOTICE below, for more i
 8. ```python3 scylla.py -g 1.1.1.1```<br/>
 Command 8 will geolocate the specified IP address. It will return the longitude & latitude, city, state/province, country, zip/postal code region and the district.<br/>
 9. ```python3 scylla.py -c 123456789123456```<br/>
-Command 9 will retrieve information on the IIN of the credit/debit card number entered. It will also check if the card number has been leaked/pasted in a breach. Scylla will return the card brand, card scheme, card type, curreny, country, and information on the bank of that IIN. NOTE: Enter the full card number if you will like to see if it was leaked. If you just want to check data on the first 6-8 digits (a.k.a the BIN/IIN number) just input the firtt 6,7 or 8 digits of the credit/debit card number. Lastly, all this information generated is public because this is an OSINT tool, and no revealing details can be generated. This prevents malicous use of this option. 
+Command 9 will retrieve information on the IIN of the credit/debit card number entered. It will also check if the card number has been leaked/pasted in a breach. Scylla will return the card brand, card scheme, card type, curreny, country, and information on the bank of that IIN. NOTE: Enter the full card number if you will like to see if it was leaked. If you just want to check data on the first 6-8 digits (a.k.a the BIN/IIN number) just input the first 6,7 or 8 digits of the credit/debit card number. Lastly, all this information generated is public because this is an OSINT tool, and no revealing details can be generated. This prevents malicous use of this option. 
 
 ## Menu
 ```
