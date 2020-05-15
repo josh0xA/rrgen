@@ -31,12 +31,14 @@ Command 7 will dump all the IP addresses and ports of open webcams on the intern
 A Sample API key is given. I will recommend reading API NOTICE below, for more information.<br/>
 8. ```python3 scylla.py -g 1.1.1.1```<br/>
 Command 8 will geolocate the specified IP address. It will return the longitude & latitude, city, state/province, country, zip/postal code region and the district.<br/>
+9. ```python3 scylla.py -c 123456789123456```<br/>
+Command 9 will retrieve information on the IIN of the credit/debit card entered. It will also check if the card number has been leaked/pasted in a breach. Scylla will return the card brand, card scheme, card type, curreny, country, and information on the bank of that IIN. NOTE: Enter the full card number if you will like to see if it was leaked. If just to check data on the first 6-8 digits(a.k.a the BIN/IIN number) just input the firt 6,7 or 8 digits of the credit/debit card number.
 
 ## Menu
 ```
 usage: scylla.py [-h] [-v] [-ig INSTAGRAM] [-tw TWITTER] [-u USERNAME]
                  [--info INFO] [-r REVERSE_PHONE_LOOKUP] [-l LOOKUP]
-                 [-s SHODAN_QUERY] [-g GEO]
+                 [-s SHODAN_QUERY] [-g GEO] [-c CARD_INFO]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -63,6 +65,10 @@ optional arguments:
                         query (i.e, 'webcamxp', 'voip', 'printer', 'apache')
   -g GEO, --geo GEO     geolocates a given IP address. provides: longitude,
                         latitude, city, country, zipcode, district, etc.
+  -c CARD_INFO, --card_info CARD_INFO
+                        check if the credit/debit card number has been pasted
+                        in a breach...dumps sites. Also returns bank
+                        information on the IIN
 ```
 ## API NOTICE
 The API used for the reverse phone number lookup (free package) has maximum 250 requests. The one used in the program right now will most definetely run out of uses in the near future. If you want to keep generating API keys, go to https://www.numverify.com, and select the free plan after creating an account. Then simply go scylla.py and replace the original API key with your new API key found in your account dashboard. Insert your new key into the keys[] array (at the top of the source). For the Shodan API key, it is just a sample key given to the program. The developer recommends creating a shodan account and adding your own API key to the shodan_api[] array at the top of the source (scylla.py). 
