@@ -844,12 +844,12 @@ class Twitter(object):
 
         try:
             dataopt = '''
-        > Name          :: {}
-        > Bio           :: {}
-        > Join date     :: {}
-        > Followers     :: {}
-        > Following     :: {}
-        > Profile URL   :: {}
+        > Name                  :: {}
+        > Bio                   :: {}
+        > Join date             :: {}
+        > Followers             :: {}
+        > Following             :: {}
+        > Profile Picture URL   :: {}
             '''.format(str(twname), str(data['Bio: ']),
                 str(data['Join date: ']), str(data['Followers: ']),
                 str(data['Following: ']), str(data['Profile URL: ']))
