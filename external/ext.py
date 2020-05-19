@@ -11,26 +11,39 @@ this file. If not, visit : https://opensource.org/licenses/MIT
 import random
 from termcolor import colored, cprint
 
+# Console colors
+W = '\033[0m'  # white (normal)
+R = '\033[31m'  # red
+G = '\033[32m'  # green
+O = '\033[33m'  # orange
+B = '\033[34m'  # blue
+P = '\033[35m'  # purple
+C = '\033[36m'  # cyan
+GR = '\033[37m'  # gray
+BOLD = '\033[1m'
+END = '\033[0m'
+
+
+
+
 def LoadScyllaBanner():
-  
-    bannerA = colored(r"""
-███████  ██████ ██    ██ ██      ██       █████                                     
-██      ██       ██  ██  ██      ██      ██   ██ 
-███████ ██        ████   ██      ██      ███████        
-     ██ ██         ██    ██      ██      ██   ██ 
-███████  ██████    ██    ███████ ███████ ██   ██   
-    """, 'red')
+    print(W + BOLD + "\n    --------------+--------------      ")
+    print(G + "            ___ /^^[___              _ ")
+    print(G + "           /|^+----+   |#___________// ")
+    print(G + "         ( -+ |____|    ______-----+/  ")
+    print(G + "          ==_________--'            \  ")
+    print(G + "            ~_|___|__                  \n" + END)
+    print(B + BOLD + "_____________________________________" + END)
+    print(R + BOLD + "               [Scylla]                  " + END)        
+    print(W + "-==[ " + BOLD + "The Information Gathering Engine" + END)
+    print(GR + "-==[  Developed By: Josh Schiavone    ")                                                                                                                                                             
+    print(B + BOLD + "_____________________________________\n" + END)                                                                                                                                                             
+
     bannerB = colored(r"""
                  ./~
         (=@@@@@@@=[}=================--
                  `\_ ... I <3 Scylla
-    """, 'cyan', attrs=['bold'])
-
-    subBanner = colored('''
-        The Information Gathering Engine
-          Developed By: Josh Schiavone                                                                                                                                                           
-    ''', 'green', attrs=['bold'])
-    print(bannerA + bannerB + subBanner)
+    """, 'cyan', attrs=['bold'])   
 
 def ScyllaBreaker():
   breaker = colored('''
