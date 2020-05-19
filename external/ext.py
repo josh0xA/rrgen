@@ -36,7 +36,7 @@ def LoadScyllaBanner():
     print(B + BOLD + "_____________________________________" + END)
     print(R + BOLD + "               [Scylla]                  " + END)        
     print(W + "-==[ " + BOLD + "The Information Gathering Engine" + END)
-    print(GR + "-==[  Developed By: Josh Schiavone    ")                                                                                                                                                             
+    print(W + "-==[ " + BOLD + "Developed By: Josh Schiavone    " + END)                                                                                                                                                             
     print(B + BOLD + "_____________________________________\n" + END)                                                                                                                                                             
 
     bannerB = colored(r"""
