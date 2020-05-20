@@ -23,9 +23,6 @@ GR = '\033[37m'  # gray
 BOLD = '\033[1m'
 END = '\033[0m'
 
-
-
-
 def LoadScyllaBanner():
     print(W + BOLD + "\n    --------------+--------------      ")
     print(G + "            ___ /^^[___              _ ")
