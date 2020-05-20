@@ -1029,7 +1029,7 @@ def main():
     parser.add_argument("-u",
                         "--username",
                         type=str,
-                        help="find social media profiles (main platforms) associated with given username",
+                        help="find social media profiles (main platforms) associated with a given username",
                         )
     parser.add_argument("--info",
                         type=str,
