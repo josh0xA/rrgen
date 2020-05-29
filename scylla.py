@@ -399,17 +399,17 @@ class Platform(object):
 
         if sys.platform == "win32" or sys.platform == "win64":
             cfg.SCL_OSYSTEM_WIN32_64 = True
-            s.print_scylla_notab("OS: Windows | Welcome: " + p.GetUsernameDescriptor() + '@' +
+            s.print_scylla_notab("OS: Windows | OSINT User: " + p.GetUsernameDescriptor() + '@' +
                 p.GetHostnameDescriptor(), color=True)
 
         if sys.platform == "darwin":
             cfg.SCL_OSYSTEM_DARWIN = True
-            s.print_scylla_notab("OS: OSX/Darwin | Welcome: " + p.GetUsernameDescriptor() + '@' +
+            s.print_scylla_notab("OS: OSX/Darwin | OSINT User: " + p.GetUsernameDescriptor() + '@' +
                 p.GetHostnameDescriptor(), color=True)
 
         if sys.platform == "linux" or sys.platform == "linux2":
             cfg.SCL_OSYSTEM_UNIX_LINUX = True
-            s.print_scylla_notab("OS: Unix/Linux | Welcome: " + p.GetUsernameDescriptor() + '@' +
+            s.print_scylla_notab("OS: Unix/Linux | OSINT User: " + p.GetUsernameDescriptor() + '@' +
                 p.GetHostnameDescriptor(), color=True)
 
     def ScyllaClear(self):
