@@ -40,6 +40,9 @@ from urllib.request import urlopen, HTTPError
 import json
 import pythonwhois
 
+import platform
+import getpass
+
 from contextlib import suppress
 import socket
 
@@ -69,7 +72,7 @@ and add their own API keys.
 '''
 sms_api = ['23f9cdfa535aa12cd21c844d552bfcb0']
 shodan_api = ['ouLQS2Obofjsb8eda7Fchq50AyNTCRPw']
-geolocation_api =['00011187b0d94706a28b0d40f9c4d679']
+geolocation_api =['3d3aa7b39b504b0992df337b4ac74801']
 
 # API URL storage (if any)
 scylla_api_urls = ['https://lookup.binlist.net/']
@@ -382,20 +385,32 @@ class Scylla(object):
 
 
 class Platform(object):
+
+    def GetHostnameDescriptor(self):
+        return platform.node()
+
+    def GetUsernameDescriptor(self):
+        return getpass.getuser()
+
     def GetOperatingSystemDescriptor(self):
         s = Scylla()
+        p = Platform()
         cfg = Config()
+
         if sys.platform == "win32" or sys.platform == "win64":
             cfg.SCL_OSYSTEM_WIN32_64 = True
-            s.print_scylla_notab("OS: Windows", color=True)
+            s.print_scylla_notab("OS: Windows | Welcome: " + p.GetUsernameDescriptor() + '@' +
+                p.GetHostnameDescriptor(), color=True)
 
         if sys.platform == "darwin":
             cfg.SCL_OSYSTEM_DARWIN = True
-            s.print_scylla_notab("OS: OSX/Darwin", color=True)
+            s.print_scylla_notab("OS: OSX/Darwin | Welcome: " + p.GetUsernameDescriptor() + '@' +
+                p.GetHostnameDescriptor(), color=True)
 
         if sys.platform == "linux" or sys.platform == "linux2":
             cfg.SCL_OSYSTEM_UNIX_LINUX = True
-            s.print_scylla_notab("OS: Unix/Linux", color=True)
+            s.print_scylla_notab("OS: Unix/Linux | Welcome: " + p.GetUsernameDescriptor() + '@' +
+                p.GetHostnameDescriptor(), color=True)
 
     def ScyllaClear(self):
         time.sleep(0.7)
@@ -522,8 +537,7 @@ class GEO(object):
             s.print_scylla_noprefix(ip_info, True)
         except Exception as e:
             s.print_scylla_error("ScyllaError", str(e), True)
-       
-
+    
 
 class Web(object):
 
@@ -581,7 +595,7 @@ class Web(object):
         info = []
         s.print_scylla_message("Retrieving WHOIS Data From Server...", color=True)
         w.scylla_geolocate_ip_address(ip_address)
-
+        
         with suppress(KeyError):
             info.append("Server: {}".format(data["emails"][0]))
 
@@ -612,7 +626,7 @@ class Web(object):
         with suppress(KeyError):
             info.append("Country: {}".format(data["country"][0]))
 
-        info_text = ", ".join(info)
+        info_text = "\n\t".join(info)
         return "{} - {}".format(domain, info_text)
 
     def search_google(self, query):
@@ -1029,7 +1043,7 @@ def main():
     parser.add_argument("-u",
                         "--username",
                         type=str,
-                        help="find social media profiles (main platforms) associated with a given username",
+                        help="find social media profiles (main platforms) associated with given username",
                         )
     parser.add_argument("--info",
                         type=str,
