@@ -38,7 +38,7 @@ from re import findall
 from urllib.request import urlopen, HTTPError
 
 import json
-import pythonwhois
+#import pythonwhois
 
 import platform
 import getpass
