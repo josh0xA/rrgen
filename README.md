@@ -34,7 +34,7 @@ void handle_array() {
   rrgen::rrand_array<int, 5> rarray;
   rarray.generate_seedless_array(true);
   rarray.show_contents();
-  std::cout << '\n' << rarray.xsize() << '\n';
+  std::cout << "\nSize: " << rarray.xsize() << '\n';
 
 }
 
@@ -61,6 +61,43 @@ int main(void) {
    
   return 0;
 }
+```
+
+### Possible Output (handle_array())
+```
+-2008733701 1821221292 165435652 896912942 850256910 
+Size: 5
+```
+### Possible Output (handle_stack())
+```
+Current Stack Size: 12
+3701296188
+Current Stack Size: 11
+2208611429
+Current Stack Size: 10
+3326656092
+Current Stack Size: 9
+532142802
+Current Stack Size: 8
+2978594177
+Current Stack Size: 7
+1103941808
+Current Stack Size: 6
+1883298880
+Current Stack Size: 5
+2425042044
+Current Stack Size: 4
+2458856231
+Current Stack Size: 3
+480226278
+Current Stack Size: 2
+719366412
+Current Stack Size: 1
+1481043649
+Current Stack Size: 0
+terminate called after throwing an instance of 'rrgen::exception::rrgen_except'
+  what():  Stack is empty!
+
 ```
 
 ## The Problem With std::rand() and other PRNGs
