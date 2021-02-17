@@ -99,6 +99,8 @@ terminate called after throwing an instance of 'rrgen::exception::rrgen_except'
   what():  Stack is empty!
 
 ```
+- Note: Traversing a stack (even an rstack) is not very smart and it is very reduntant as it takes away from the main purpose of the containter. Only showing for development purposes.
+``` 
 
 ## The Problem With std::rand() and other PRNGs
 First, rand is a pseudorandom number generator. This means it depends on a seed. For a given seed it will always give the same sequence (assuming the same implementation). This makes it not suitable for certain applications where security is of a great concern. But this is not specific to rand. It's a problem of any pseudo-random generator. A true random generator has its own problems (efficiency, implementation, entropy) so for problems that are not security related most often a pseudo-random generator is used.
