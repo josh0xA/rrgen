@@ -9,13 +9,13 @@ This library was developed to combat unsecure methods of storing random data int
 3) ``std::array<Type, std::size_t>``<br/>
 4) ``std::stack<Type>``<br/>
 
-## Example Usage 
+## Example Usage (#1)
 ```cpp
 #include "include/rrgen.hpp"
 #include <iostream>
 
 int main(void) {
-  rrgen::rrand<int, std::vector, 10> rvector; // Create vector container (size=10) containing integers
+  rrgen::rrand<short, std::vector, 10> rvector; // Create vector container (size=10) containing integers
   rvector.generate_seedless_vector(true); // Fill the vector with a secure random distribution of integers
   rvector.show_contents();
 }
@@ -23,7 +23,7 @@ int main(void) {
 ```
 ### Output
 ```
--1860473608 -39872614 -1696385259 1531108352 267523341 1393768744 2044415449 191601921 1404331738 -740597320 
+28153 29568 15744 -22325 -21678 -26256 -23805 -30591 2896 30121
 ```
 
 
