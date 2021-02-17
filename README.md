@@ -16,10 +16,14 @@ This library was developed to combat unsecure methods of storing random data int
 
 int main(void) {
   rrgen::rrand<int, std::vector, 10> rvector; // Create vector container (size=10) containing integers
-  rvector.generate_seedless_vector(true) // Fill the vector with a secure random distribution of integers
+  rvector.generate_seedless_vector(true); // Fill the vector with a secure random distribution of integers
   rvector.show_contents();
 }
 
+```
+### Output
+```
+-1860473608 -39872614 -1696385259 1531108352 267523341 1393768744 2044415449 191601921 1404331738 -740597320 
 ```
 
 
