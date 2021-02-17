@@ -5,3 +5,14 @@ About
 =====
 This library was developed to combat unsecure methods of storing random data into modern C++ containers. For example, pseudorandom number generators. Thus, rrgen uses STL's seedless distribution engines in order to efficiently and safely store a random number distribution into a certain C++ container.
 
+Documentation
+=============
+Namespaces:
+  rrgen:: 
+  rrgen::exception 
+Classes:
+  ``rrgen::rrand<typename, template <typename, typename> class Arg, std::size_t __datasize>``
+  ``rrgen::rrand_array<typename, std::size_t __datasize>``
+  ``rrgen::rrand_stack<typename, std::size_t __datasize>``
+ 
+
