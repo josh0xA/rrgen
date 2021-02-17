@@ -14,5 +14,8 @@ Classes:
   | ``rrgen::rrand<typename, template <typename, typename> class Arg, std::size_t __datasize>``
   | ``rrgen::rrand_array<typename, std::size_t __datasize>``
   | ``rrgen::rrand_stack<typename, std::size_t __datasize>``
- 
+
+Functions: 
+  | rrgen::rrand<> 
+  |   public: ``generate_seedless_vector(bool gen)`` - bool: If true, will add data to vector. If not, no data will be added.  
 
