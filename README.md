@@ -21,11 +21,47 @@ int main(void) {
 }
 
 ```
-### Output
+### Possible Output
 ```
 28153 29568 15744 -22325 -21678 -26256 -23805 -30591 2896 30121
 ```
+## Example Usage (#2)
+```cpp
+#include "include/rrgen.hpp"
+#include <iostream>
 
+void handle_array() {
+  rrgen::rrand_array<int, 5> rarray;
+  rarray.generate_seedless_array(true);
+  rarray.show_contents();
+  std::cout << '\n' << rarray.xsize() << '\n';
+
+}
+
+void handle_stack() {
+  rrgen::rrand_stack<uint32_t 12> rstack; 
+  rstack.generate_seedless_stack(true); 
+  std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
+  
+  for (auto m = rstack.xsize(); x--;) {
+    std::cout << rstack.grab_top() << '\n';
+    rstack.pop_off();
+    std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
+    
+    if (rstack.is_empty()) {
+      throw rrgen::exception::rrgen_except("Stack is empty!\n");
+    }
+
+  }
+}
+
+int main(void) {
+  handle_array();
+  handle_stack();
+   
+  return 0;
+}
+```
 
 ## The Problem With std::rand() and other PRNGs
 First, rand is a pseudorandom number generator. This means it depends on a seed. For a given seed it will always give the same sequence (assuming the same implementation). This makes it not suitable for certain applications where security is of a great concern. But this is not specific to rand. It's a problem of any pseudo-random generator. A true random generator has its own problems (efficiency, implementation, entropy) so for problems that are not security related most often a pseudo-random generator is used.
