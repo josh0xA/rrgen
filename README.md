@@ -39,11 +39,11 @@ void handle_array() {
 }
 
 void handle_stack() {
-  rrgen::rrand_stack<uint32_t 12> rstack; 
+  rrgen::rrand_stack<uint32_t, 12> rstack; 
   rstack.generate_seedless_stack(true); 
   std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
   
-  for (auto m = rstack.xsize(); x--;) {
+  for (auto m = rstack.xsize(); m--;) {
     std::cout << rstack.grab_top() << '\n';
     rstack.pop_off();
     std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
