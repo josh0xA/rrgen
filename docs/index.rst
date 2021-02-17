@@ -8,11 +8,11 @@ This library was developed to combat unsecure methods of storing random data int
 Documentation
 =============
 Namespaces:
-  ``rrgen::``
-  ``rrgen::exception``
+  | ``rrgen::``
+  | ``rrgen::exception``
 Classes:
-  ``rrgen::rrand<typename, template <typename, typename> class Arg, std::size_t __datasize>``
-  ``rrgen::rrand_array<typename, std::size_t __datasize>``
-  ``rrgen::rrand_stack<typename, std::size_t __datasize>``
+  | ``rrgen::rrand<typename, template <typename, typename> class Arg, std::size_t __datasize>``
+  | ``rrgen::rrand_array<typename, std::size_t __datasize>``
+  | ``rrgen::rrand_stack<typename, std::size_t __datasize>``
  
 
