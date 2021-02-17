@@ -10,6 +10,17 @@ This library was developed to combat unsecure methods of storing random data int
 4) ``std::stack<Type>``<br/>
 
 ## Example Usage 
+```cpp
+#include "include/rrgen.hpp"
+#include <iostream>
+
+int main(void) {
+  rrgen::rrand<int, std::vector, 10> rvector; // Create vector container (size=10) containing integers
+  rvector.generate_seedless_vector(true) // Fill the vector with a secure random distribution of integers
+  rvector.show_contents();
+}
+
+```
 
 
 ## The Problem With std::rand() and other PRNGs
