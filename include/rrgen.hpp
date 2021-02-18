@@ -48,26 +48,57 @@ SOFTWARE.
 typedef const char __cchar; 
 
 namespace rrgen {
+  /**
+   * @brief For universal conditional use if true
+   * @param bool, value to test
+   * @return bool
+   */
   inline bool rrgen_success_on_return_value(bool __svalue) {
     
     return (__svalue == true);
   }
+
   inline bool rrgen_error_on_return_value(bool __svalue) {
+    /**
+     * @brief For universal conditional use if false
+     * @param bool, value to test
+     * @return bool
+     */
     return (__svalue == false);
   }
   
   constexpr unsigned int str_to_integer(const char* str, int hdx = 0) {
+    /**
+     * @brief Library function for string to integer conversions
+     * @param const char*, integer
+     * @return unsigned integer
+     */
     return !str[hdx] ? 5381 : (str_to_integer(str, hdx+1) * 33) ^ str[hdx];
   }
 
   typedef struct __modes__ {
+    /**
+     * @brief Library structure for setting modes for list generations
+     * through std::random engines
+     */
     __cchar* RRGEN_FRONTSIDE_MODE = "fside"; 
     __cchar* RRGEN_BACKSIDE_MODE = "bside";
   } modes, *pmodes; 
-
+  
+  /**
+   * @brief Nested template class rrand. 
+   * @class Usage for std::vector and std::list generations
+   * @format rrand<typename, template<typename, typename>, std::size_t>
+   */
   template <typename rand_type, template <typename, typename> class Arg, std::size_t __datasize>
   class rrand {
   protected:
+    /**
+     * @brief Creates a seedless distribution of random numbers in the range of 
+     * std::numeric_limits<type>::min() -> std::numeric_limits<type>::max()
+     * @param std::mt19937, seedless generation engine
+     * @return std::unirom_int_distribution<type>
+     */
     std::uniform_int_distribution<rand_type> gen_random_data(const std::mt19937 __mtgenerator) {
       std::uniform_int_distribution<rand_type> distribution(
         std::numeric_limits<rand_type>::min(),
@@ -76,6 +107,11 @@ namespace rrgen {
     }
     modes mds;
   public:
+    /**
+     * @brief Randomly generates data and stores the values into a vector
+     * @param bool, must be true in order to generate data
+     * @return Arg<rand_type, std::allocator<rand_type>> - data container
+     */
     Arg<rand_type, std::allocator<rand_type>> generate_seedless_vector(bool gen) {
       std::mt19937 __mtgenerator(__device());
       if (rrgen_success_on_return_value(gen)) {
@@ -86,7 +122,12 @@ namespace rrgen {
         return struct_container;
       } else { return struct_container; }
     }
-    
+    /**
+    * @brief Randomly generates data and stores the values into a list
+    * @param bool - must be true in order to generate data, std::string - push
+    * direction
+    * @return Arg<rand_type, std::allocator<rand_type>> - data container
+    */
     Arg<rand_type, std::allocator<rand_type>> generate_seedless_list(bool gen, const std::string& direction) {
       std::mt19937 __mtgenerator(__device()); 
       if (rrgen_success_on_return_value(gen)) {
@@ -106,16 +147,31 @@ namespace rrgen {
     }
 
     rand_type show_contents() const {
+      /**
+       * @brief Prints the data stored in the container
+       * @param void 
+       * @return typename (rand_type)
+       */
       for (const rand_type& content : struct_container) {
         std::cout << content << " "; 
       }
     }
     
     rand_type xsize() const {
+      /**
+       * @brief Returns the size of the container
+       * @param void
+       * @return typename (rand_type)
+       */
       return struct_container.size();
     }
 
     void delete_contents() {
+      /**
+       * @brief Deletes all of the stored data in the container
+       * @param void
+       * @return void
+       */
       struct_container.clear(); 
     }
    
@@ -124,9 +180,20 @@ namespace rrgen {
     std::random_device __device;  
   }; // class: rrand
 
+  /**
+   * @brief Template class rrand_array
+   * @class Usage for generating random seedless data for std::array
+   * @format rrand_array<typename, std::size_t> 
+   */
   template <typename rand_type, std::size_t __datasize>
   class rrand_array {
   protected:
+    /**
+     * @brief Creates a seedless distribution of random numbers in the range of 
+     * std::numeric_limits<type>::min() -> std::numeric_limits<type>::max()
+     * @param std::mt19937, seedless generation engine
+     * @return std::unirom_int_distribution<type>
+     */
     std::uniform_int_distribution<rand_type> gen_random_data(const std::mt19937 __mtgenerator) {
       std::uniform_int_distribution<rand_type> distribution(
         std::numeric_limits<rand_type>::min(),
@@ -134,6 +201,12 @@ namespace rrgen {
       return distribution;
     }
   public:
+    /**
+     * @brief Generates random seedless data and stores values into std::array
+     * container
+     * @param bool, must be true in order for generation to occur
+     * @return std::array<typename, std::size_t>
+     */
     std::array<rand_type, __datasize> generate_seedless_array(bool gen) {
       std::mt19937 __mtgenerator(__device());
       if (rrgen_success_on_return_value(gen)) {
@@ -146,11 +219,20 @@ namespace rrgen {
     }
     
     rand_type show_contents() const {
+      /**
+       * @brief Iterates array contents and outputs the data stored
+       * @param void
+       * @return typename (rand_type)
+       */
       for (const auto& content : array_container) {
         std::cout << content << " "; 
       }
     }
-    
+    /**
+     * @brief Returns size of array container
+     * @param void
+     * @return typename (rand_tpe)
+     */
     rand_type xsize() const  { return array_container.size(); }
        
   private:
@@ -158,6 +240,11 @@ namespace rrgen {
     std::array<rand_type, __datasize> array_container; 
   }; // class: rrand_array
 
+  /**
+   * @brief Inherited Template class rrand_stack 
+   * @class Usage for generating random seedless data for std::stack
+   * @format rrand_stack<typename, std::size_t> 
+   */
   template <typename rand_type, std::size_t __datasize>
   class rrand_stack : protected rrand_array<rand_type, __datasize> {
   public:
@@ -173,22 +260,47 @@ namespace rrgen {
     }
     
     constexpr bool is_empty() const noexcept {
+      /**
+       * @brief returns whether or not the stack is empty
+       * @param void
+       * @return bool 
+       */
       return stack_container.empty(); 
     }
 
     rand_type grab_top() const {
+      /**
+       * @brief returns the element at the top of the stack
+       * @param void
+       * @return typename (rand_type)
+       */
       return stack_container.top();
     }
     
     void push_top(rand_type value) {
+      /**
+       * @brief pushes argument to the top of the stack container
+       * @param typename (rand_type) - element/value to push 
+       * @return void
+       */
       stack_container.push(value);
     }
 
     rand_type xsize() const {
+      /**
+       * @brief returns the size of the stack container (# of elements)
+       * @param void
+       * @return typename (rand_type)
+       */
       return stack_container.size();
     }
 
     void pop_off() {
+      /**
+       * @brief pops the top element off of the stack container
+       * @param void
+       * @return void
+       */
       stack_container.pop();
     }
   
@@ -199,13 +311,21 @@ namespace rrgen {
 
   namespace exception {
     /**
-    * @brief rrgen exception class
+    * @brief rrgen exception class - inherits fron stdexcept
     * Used to throw exceptions rather than std::cerr
     */
     class rrgen_except : public std::exception {
     public:
+      /**
+       * @brief Constructor - sets error strings
+       * @class rrgen_except
+       */
       rrgen_except(const char* const message) : __errmessage__{message} {};
-
+      /**
+       * @brief returns the error message 
+       * @param void
+       * @return const char*
+       */
       const char* what() const noexcept { return __errmessage__; }
     private:
       const char* __errmessage__;      
