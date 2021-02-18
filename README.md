@@ -24,7 +24,7 @@ https://rrgen.readthedocs.io/
 1) ``std::vector<Type> (std::size_t)``<br/>
 2) ``std::list<Type> (std::size_t)``<br/>
 3) ``std::array<Type, std::size_t>``<br/>
-4) ``std::stack<Type>``<br/>
+4) ``std::stack<Type, std::size_t>``<br/>
 
 ## Example Usage (#1)
 ```cpp
