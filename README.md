@@ -3,6 +3,9 @@
   <img src="https://github.com/josh0xA/Scylla/blob/master/imgs/Screen%20Shot%202020-05-10%20at%206.43.35%20AM.png?raw=true">
 </p>
 
+# Notice For Deprecation
+This project is no longer being worked on by the developer. As of today, the program has many flaws and is not up to modern OSINT standards. A lot of APIs utilized within Scylla are no longer working as they did when the project was first released. The developer wrote Scylla out of boredom and as a side project therefore he is no longer working on it. The community is more than welcome to use Scylla's source as a base to improve on it's original capabilities to keep the tool alive. Please do not contact the developer to fix issues as he will not be replying as the project is deprecated. 
+
 ## About Scylla
 Scylla is an OSINT tool developed in Python 3.6. Scylla lets users perform advanced searches on Instagram & Twitter accounts, websites/webservers, phone numbers, and names. Scylla also allows users to find all social media profiles (main platforms) assigned to a certain username. In continuation, Scylla has shodan support so you can search for devices all over the internet, it also has in-depth geolocation capabilities. Lastly, Scylla has a finance section which allows users to check if a credit/debit card number has been leaked/pasted in a breach and returns information on the cards IIN/BIN. This is the first version of the tool so please contact the developer if you want to help contribute and add more to Scylla.
 
