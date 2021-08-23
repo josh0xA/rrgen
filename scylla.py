@@ -71,7 +71,7 @@ API Key Storage. Users can modify the these arrays in the source to fit there ne
 and add their own API keys. 
 '''
 sms_api = ['23f9cdfa535aa12cd21c844d552bfcb0']
-shodan_api = ['ouLQS2Obofjsb8eda7Fchq50AyNTCRPw']
+shodan_api = ['oXQ0mVDkPSMhqR97otDXqXTjmFeAvZGU']
 geolocation_api =['3d3aa7b39b504b0992df337b4ac74801']
 
 # API URL storage (if any)
