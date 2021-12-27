@@ -1,0 +1,3 @@
+git clone https://www.github.com/DoubleThreatSecurity/Scylla  cd Scylla
+sudo python3 -m pip install -r requirments.txt
+python3 scylla.py --help
