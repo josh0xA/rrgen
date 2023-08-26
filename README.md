@@ -10,7 +10,7 @@ This project is no longer being worked on by the developer. As of today, the pro
 Scylla is an OSINT tool developed in Python 3.6. Scylla lets users perform advanced searches on Instagram & Twitter accounts, websites/webservers, phone numbers, and names. Scylla also allows users to find all social media profiles (main platforms) assigned to a certain username. In continuation, Scylla has shodan support so you can search for devices all over the internet, it also has in-depth geolocation capabilities. Lastly, Scylla has a finance section which allows users to check if a credit/debit card number has been leaked/pasted in a breach and returns information on the cards IIN/BIN. This is the first version of the tool so please contact the developer if you want to help contribute and add more to Scylla.
 
 ## Installation
-1: ```git clone https://www.github.com/DoubleThreatSecurity/Scylla```<br/>
+1: ```git clone https://www.github.com/josh0xA/Scylla```<br/>
 2: ```cd Scylla```<br/>
 3: ```sudo python3 -m pip install -r requirments.txt```<br/>
 4: ```python3 scylla.py --help```<br/>
