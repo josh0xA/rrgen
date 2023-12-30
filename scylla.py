@@ -70,9 +70,9 @@ reqSuccessCodes = [200, 201, 202, 203]
 API Key Storage. Users can modify the these arrays in the source to fit there needs
 and add their own API keys. 
 '''
-sms_api = ['23f9cdfa535aa12cd21c844d552bfcb0']
-shodan_api = ['oXQ0mVDkPSMhqR97otDXqXTjmFeAvZGU']
-geolocation_api =['3d3aa7b39b504b0992df337b4ac74801']
+sms_api = ['']
+shodan_api = ['']
+geolocation_api =['']
 
 # API URL storage (if any)
 scylla_api_urls = ['https://lookup.binlist.net/']
