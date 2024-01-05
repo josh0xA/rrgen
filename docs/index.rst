@@ -17,6 +17,6 @@ Classes:
 
 Functions: 
   | ``rrgen::rrand<>`` 
-  |     public: ``generate_seedless_vector(bool gen)`` This function uses STL's random distribution engine's in order to safely and securely generate random data between the numeric limits of a type. This data is then stored in the vector. Args:bool: If true, will add data to vector. If not, no data will be added.  
-  |     public: ``generate_seedless_list(bool gen, const std::string& direction)`` This function uses STL's random distribution engine's in order to safely and securely generate random data between the numeric limits of a type. This data is then stored in the list. Args:bool: If true, will add data to list. If not, no data will be added. Args:const std::string&: Push data from the front or the back. Supported: "fside" & "bside". 
+  |     public: ``generate_rrvector(bool gen)`` This function uses STL's random distribution engine's in order to safely and securely generate random data between the numeric limits of a type. This data is then stored in the vector. Args:bool: If true, will add data to vector. If not, no data will be added.  
+  |     public: ``generate_rrlist(bool gen, const std::string& direction)`` This function uses STL's random distribution engine's in order to safely and securely generate random data between the numeric limits of a type. This data is then stored in the list. Args:bool: If true, will add data to list. If not, no data will be added. Args:const std::string&: Push data from the front or the back. Supported: "fside" & "bside". 
   
