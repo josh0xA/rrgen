@@ -14,7 +14,7 @@ This library was developed to combat insecure methods of storing random data int
 4) Add ``include/rrgen.hpp`` to your project tree for access to the library classes and functions.<br/>
 
 ## Official Documentation
-https://rrgen.readthedocs.io/
+*rrgen/docs/index.rst*
 
 ## Supported Containers
 1) ``std::vector<Type> (std::size_t)``<br/>
