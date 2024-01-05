@@ -93,18 +93,38 @@ namespace rrgen {
   template <typename rand_type, template <typename, typename> class Arg, std::size_t __datasize>
   class rrand {
   protected:
-    /**
-     * @brief Creates a seedless distribution of random numbers in the range of 
-     * std::numeric_limits<type>::min() -> std::numeric_limits<type>::max()
-     * @param std::mt19937, seedless generation engine
-     * @return std::unirom_int_distribution<type>
-     */
-    std::uniform_int_distribution<rand_type> gen_random_data(const std::mt19937 __mtgenerator) {
-      std::uniform_int_distribution<rand_type> distribution(
-        std::numeric_limits<rand_type>::min(),
-        std::numeric_limits<rand_type>::max());
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_integral_v<T>, std::uniform_int_distribution<T>>
+    gen_random_data_numeric(const std::mt19937 __mtgenerator) {
+      std::uniform_int_distribution<T> distribution(
+        std::numeric_limits<T>::min(),
+        std::numeric_limits<T>::max());
       return distribution;
     }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>>
+    gen_random_data_numeric(const std::mt19937 __mtgenerator) {
+      std::uniform_real_distribution<T> distribution(
+        std::numeric_limits<T>::min(),
+        std::numeric_limits<T>::max());
+      return distribution;
+    }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_integral_v<T>, std::uniform_int_distribution<T>>
+    gen_random_data_mm(const std::mt19937 __mtgenerator, T __min, T __max) {
+      std::uniform_int_distribution<T> distribution(__min, __max);
+      return distribution;
+    }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>>
+    gen_random_data_mm(const std::mt19937 __mtgenerator, T __min, T __max) {
+      std::uniform_real_distribution<T> distribution(__min, __max);
+      return distribution;
+    }
+
     modes mds;
   public:
     /**
@@ -112,15 +132,24 @@ namespace rrgen {
      * @param bool, must be true in order to generate data
      * @return Arg<rand_type, std::allocator<rand_type>> - data container
      */
-    Arg<rand_type, std::allocator<rand_type>> gen_rrvector(bool gen) {
+    Arg<rand_type, std::allocator<rand_type>> gen_rrvector(bool numeric, bool minmax, 
+      rand_type __min = 0, rand_type __max = 100) {
       std::mt19937 __mtgenerator(__device());
-      if (rrgen_success_on_return_value(gen)) {
-        auto dist = gen_random_data(__mtgenerator);
+      if (rrgen_success_on_return_value(numeric)) {
+        auto dist = gen_random_data_numeric(__mtgenerator);
         for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
           struct_container.push_back(dist(__mtgenerator));
         }
         return struct_container;
-      } else { return struct_container; }
+      } else { 
+          if (rrgen_success_on_return_value(minmax)) {
+            auto dist = gen_random_data_mm(__mtgenerator, __min, __max);
+            for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
+              struct_container.push_back(dist(__mtgenerator));
+            }
+            return struct_container;
+          } else { return struct_container; }
+      }
     }
     /**
     * @brief Randomly generates data and stores the values into a list
@@ -128,10 +157,11 @@ namespace rrgen {
     * direction
     * @return Arg<rand_type, std::allocator<rand_type>> - data container
     */
-    Arg<rand_type, std::allocator<rand_type>> gen_rrlist(bool gen, const std::string& direction) {
+    Arg<rand_type, std::allocator<rand_type>> gen_rrlist(bool numeric, bool minmax, 
+        const std::string& direction, rand_type __min = 0, rand_type __max = 100) {
       std::mt19937 __mtgenerator(__device()); 
-      if (rrgen_success_on_return_value(gen)) {
-        auto dist = gen_random_data(__mtgenerator);
+      if (rrgen_success_on_return_value(numeric)) {
+        auto dist = gen_random_data_numeric(__mtgenerator);
         if (rrgen_success_on_return_value(direction.compare(mds.RRGEN_FRONTSIDE_MODE))) { 
             for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
               struct_container.push_front(dist(__mtgenerator));
@@ -143,7 +173,22 @@ namespace rrgen {
             }
         }
         return struct_container; 
-      } else { return struct_container; }
+      } else { 
+          if (rrgen_success_on_return_value(minmax)) {
+            auto dist = gen_random_data_mm(__mtgenerator, __min, __max);
+            if (rrgen_success_on_return_value(direction.compare(mds.RRGEN_FRONTSIDE_MODE))) { 
+              for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
+                struct_container.push_front(dist(__mtgenerator));
+              }
+            } 
+            if (rrgen_success_on_return_value(direction.compare(mds.RRGEN_BACKSIDE_MODE))) {
+              for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
+                struct_container.push_back(dist(__mtgenerator));
+              }
+            }
+            return struct_container; 
+          } else { return struct_container; }
+      }
     }
 
     rand_type show_contents() const {
@@ -182,40 +227,74 @@ namespace rrgen {
 
   /**
    * @brief Template class rrand_array
-   * @class Usage for generating random seedless data for std::array
+   * @class Usage for generating random uniform data for std::array
    * @format rrand_array<typename, std::size_t> 
    */
   template <typename rand_type, std::size_t __datasize>
   class rrand_array {
   protected:
     /**
-     * @brief Creates a seedless distribution of random numbers in the range of 
+     * @brief Creates a uniform distribution of random numbers in the range of 
      * std::numeric_limits<type>::min() -> std::numeric_limits<type>::max()
-     * @param std::mt19937, seedless generation engine
+     * @param std::mt19937, uniform generation engine
      * @return std::unirom_int_distribution<type>
      */
-    std::uniform_int_distribution<rand_type> gen_random_data(const std::mt19937 __mtgenerator) {
-      std::uniform_int_distribution<rand_type> distribution(
-        std::numeric_limits<rand_type>::min(),
-        std::numeric_limits<rand_type>::max());
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_integral_v<T>, std::uniform_int_distribution<T>>
+    gen_random_data(const std::mt19937 __mtgenerator) {
+      std::uniform_int_distribution<T> distribution(
+        std::numeric_limits<T>::min(),
+        std::numeric_limits<T>::max());
       return distribution;
     }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>>
+    gen_random_data(const std::mt19937 __mtgenerator) {
+      std::uniform_real_distribution<T> distribution(
+        std::numeric_limits<T>::min(),
+        std::numeric_limits<T>::max());
+      return distribution;
+    }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_integral_v<T>, std::uniform_int_distribution<T>>
+    gen_random_data_mm(const std::mt19937 __mtgenerator, T __min, T __max) {
+      std::uniform_int_distribution<T> distribution(__min, __max);
+      return distribution;
+    }
+
+    template <typename T = rand_type>
+    std::enable_if_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>>
+    gen_random_data_mm(const std::mt19937 __mtgenerator, T __min, T __max) {
+      std::uniform_real_distribution<T> distribution(__min, __max);
+      return distribution;
+    }
+
   public:
     /**
-     * @brief Generates random seedless data and stores values into std::array
+     * @brief Generates random uniform data and stores values into std::array
      * container
      * @param bool, must be true in order for generation to occur
      * @return std::array<typename, std::size_t>
      */
-    std::array<rand_type, __datasize> gen_rrarray(bool gen) {
+    std::array<rand_type, __datasize> gen_rrarray(bool numeric, bool minmax, rand_type __min = 0, rand_type __max = 100) {
       std::mt19937 __mtgenerator(__device());
-      if (rrgen_success_on_return_value(gen)) {
+      if (rrgen_success_on_return_value(numeric)) {
         auto dist = gen_random_data(__mtgenerator);
         for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
           array_container.at(elem) = dist(__mtgenerator);
         }
         return array_container; 
-      } else { return array_container; }
+      } else { 
+          if (rrgen_success_on_return_value(minmax)) {
+            auto dist = gen_random_data_mm(__mtgenerator, __min, __max);
+            for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
+              array_container.at(elem) = dist(__mtgenerator);
+            }
+            return array_container; 
+          } else { return array_container; }
+      }
     }
     
     rand_type show_contents() const {
@@ -242,21 +321,29 @@ namespace rrgen {
 
   /**
    * @brief Inherited Template class rrand_stack 
-   * @class Usage for generating random seedless data for std::stack
+   * @class Usage for generating random uniform data for std::stack
    * @format rrand_stack<typename, std::size_t> 
    */
   template <typename rand_type, std::size_t __datasize>
   class rrand_stack : protected rrand_array<rand_type, __datasize> {
   public:
-    std::stack<rand_type> gen_rrstack(bool gen) {
+    std::stack<rand_type> gen_rrstack(bool numeric, bool minmax, rand_type __min = 0, rand_type __max = 100) {
       std::mt19937 __mtgenerator(__device());
-      if (rrgen_success_on_return_value(gen)) {
+      if (rrgen_success_on_return_value(numeric)) {
         auto dist = rrand_array<rand_type, __datasize>::gen_random_data(__mtgenerator);
         for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
           stack_container.push(dist(__mtgenerator));
         }
         return stack_container; 
-      } else { return stack_container; }
+      } else { 
+          if (rrgen_success_on_return_value(minmax)) {
+            auto dist = rrand_array<rand_type, __datasize>::gen_random_data_mm(__mtgenerator, __min, __max);
+            for (auto elem = RRGEN_SUCCESS_CODE_STANDARD; elem < __datasize; ++elem) {
+              stack_container.push(dist(__mtgenerator));
+            }
+            return stack_container; 
+          } else { return stack_container; }
+      }
     }
     
     constexpr bool is_empty() const noexcept {
