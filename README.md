@@ -19,85 +19,52 @@ This library was developed to combat insecure methods of storing random data int
 *rrgen/docs/index.rst*
 
 ## Supported Containers
-1) ``std::vector<Type> (std::size_t)``<br/>
-2) ``std::list<Type> (std::size_t)``<br/>
-3) ``std::array<Type, std::size_t>``<br/>
-4) ``std::stack<Type, std::size_t>``<br/>
+1) ``std::vector<>``<br/>
+2) ``std::list<>``<br/>
+3) ``std::array<>``<br/>
+4) ``std::stack<>`<br/>
 
-## Example Usage (#1)
+## Example Usages
 ```cpp
-#include "include/rrgen.hpp"
+#include "../include/rrgen.hpp"
 #include <iostream>
 
-int main(void) {
-  rrgen::rrand<short, std::vector, 10> rvector; // Create vector container (size=10) containing integers
-  rvector.gen_rrvector(true); // Fill the vector with a secure random distribution of integers
-  rvector.show_contents();
+int main(void)
+{
+    // Example usage for rrgen vector
+    rrgen::rrand<float, std::vector, 10> rrvec;
+    rrvec.gen_rrvector(false, true, 0, 10);
+    for (auto &i : rrvec.contents())
+    {
+        std::cout << i << " ";
+    } // ^ the same as rrvec.show_contents()
+
+    // Example usage for rrgen list (frontside insertion)
+    rrgen::rrand<int, std::list, 10> rrlist;
+    rrlist.gen_rrlist(false, true, "fside", 5, 25);
+    std::cout << '\n'; rrlist.show_contents();
+    std::cout << "Size: " << rrlist.contents().size() << '\n';
+
+    // Example usage for rrgen array
+    rrgen::rrand_array<int, 5> rrarr;
+    rrarr.gen_rrarray(false, true, 5, 35);
+    for (auto &i : rrarr.contents())
+    {
+        std::cout << i << " ";
+    } // ^ the same as rrarr.show_contents()
+
+    // Example usage for rrgen stack 
+    rrgen::rrand_stack<float, 10> rrstack;
+    rrstack.gen_rrstack(false, true, 200, 1000);
+    for (auto m = rrstack.xsize(); m > 0; m--)
+    {
+        std::cout << rrstack.grab_top() << " ";
+        rrstack.pop_off();
+        if (m == 1) { std::cout << '\n'; }
+    } 
 }
 
-```
-### Possible Output
-```
-28153 29568 15744 -22325 -21678 -26256 -23805 -30591 2896 30121
-```
-## Example Usage (#2)
-```cpp
-#include "include/rrgen.hpp"
-#include <iostream>
-
-void handle_array() {
-  rrgen::rrand_array<int, 5> rarray;
-  rarray.gen_rrarray(true);
-  rarray.show_contents();
-  std::cout << "\nSize: " << rarray.xsize() << '\n';
-
-}
-
-void handle_stack() {
-  rrgen::rrand_stack<uint32_t, 12> rstack; 
-  rstack.gen_rrstack(true); 
-  std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
-  
-  for (auto m = rstack.xsize(); m--;) {
-    std::cout << rstack.grab_top() << '\n';
-    rstack.pop_off();
-    std::cout << "Current Stack Size: " << rstack.xsize() << '\n';
-    
-    if (rstack.is_empty()) {
-      throw rrgen::exception::rrgen_except("Stack is empty!\n");
-    }
-
-  }
-}
-
-int main(void) {
-  handle_array();
-  handle_stack();
-   
-  return 0;
-}
-```
-
-### Possible Output (handle_array())
-```
--2008733701 1821221292 165435652 896912942 850256910 
-Size: 5
-```
-### Possible Output (handle_stack())
-```
-Current Stack Size: 12
-3701296188
-Current Stack Size: 11
-2208611429
-Current Stack Size: 10
-3326656092
-...
-Current Stack Size: 0
-terminate called after throwing an instance of 'rrgen::exception::rrgen_except'
-  what():  Stack is empty!
-
-```
-
+``
 Note: This is a transferred repository, from a completely unrelated project. 
 
 ## License 
