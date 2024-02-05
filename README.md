@@ -22,7 +22,7 @@ This library was developed to combat insecure methods of storing random data int
 1) ``std::vector<>``<br/>
 2) ``std::list<>``<br/>
 3) ``std::array<>``<br/>
-4) ``std::stack<>`<br/>
+4) ``std::stack<>``<br/>
 
 ## Example Usages
 ```cpp
