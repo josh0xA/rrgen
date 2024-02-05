@@ -67,15 +67,6 @@ namespace rrgen {
     return (__svalue == false);
   }
   
-  constexpr unsigned int str_to_integer(const char* str, int hdx = 0) {
-    /**
-     * @brief Library function for string to integer conversions
-     * @param const char*, integer
-     * @return unsigned integer
-     */
-    return !str[hdx] ? 5381 : (str_to_integer(str, hdx+1) * 33) ^ str[hdx];
-  }
-
   typedef struct __modes__ {
     /**
      * @brief Library structure for setting modes for list generations
@@ -191,6 +182,10 @@ namespace rrgen {
       }
     }
 
+    Arg<rand_type, std::allocator<rand_type>> contents() const {
+      return struct_container;
+    }
+
     rand_type show_contents() const {
       /**
        * @brief Prints the data stored in the container
@@ -296,6 +291,10 @@ namespace rrgen {
           } else { return array_container; }
       }
     }
+
+    std::array<rand_type, __datasize> contents() const {
+      return array_container;
+    }
     
     rand_type show_contents() const {
       /**
@@ -313,6 +312,7 @@ namespace rrgen {
      * @return typename (rand_tpe)
      */
     rand_type xsize() const  { return array_container.size(); }
+
        
   private:
     std::random_device __device; 
@@ -344,6 +344,10 @@ namespace rrgen {
             return stack_container; 
           } else { return stack_container; }
       }
+    }
+
+    std::stack<rand_type> contents() const {
+      return stack_container;
     }
     
     constexpr bool is_empty() const noexcept {
