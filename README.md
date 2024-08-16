@@ -1,4 +1,4 @@
-# rrgen - A Header Only C++ Library For Storing Safe, Randomly Generated Data Into Modern Containers 
+# rrgen - A Header Only C++ Library For Storing Safe, Pseudo-randomly Generated Data Into Modern Containers 
 <p align="center">
     <img src="https://raw.githubusercontent.com/josh0xA/rrgen/master/docs/rrgen_logo.png"/></a>
 </p>
