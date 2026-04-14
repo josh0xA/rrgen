@@ -1,10 +1,4 @@
 # rrgen - A Header Only C++ Library For Storing Safe, Pseudo-randomly Generated Data Into Modern Containers 
-<p align="center">
-    <img src="https://raw.githubusercontent.com/josh0xA/rrgen/master/docs/rrgen_logo.png"/></a>
-</p>
-<p align="center">
-    <a href="https://lbesson.mit-license.org/" target="_blank"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="lisence" /></a>
-</p>
 
 ## About
 This library was developed to combat insecure methods of storing random data into modern C++ containers. For example, old and clunky PRNGs. Thus, rrgen uses STL's distribution engines in order to efficiently and safely store a random number distribution into a given C++ container. 
